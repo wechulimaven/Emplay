@@ -267,6 +267,7 @@
   "themeSaved": "Tema disimpan!",
   "title": "Judul",
   "trendingSearch": "Pencarian Tren",
+  "trendingMusic": "Trending Sangeet",
   "ui":"UI Aplikasi",
   "undo": "Membuka",
   "unknown": "Tidak dikenal",
@@ -298,5 +299,6 @@
   "yesReplace": "Ya, tapi Ganti Yang Lama",
   "youTube": "Youtube",
   "ytLiveAlert": "Video ditayangkan. Harap tunggu hingga streaming langsung selesai dan coba lagi.",
-  "za": "Z-A"
+  "za": "Z-A",
+  "importPlaylist":"plelist aayaat karen"
 }

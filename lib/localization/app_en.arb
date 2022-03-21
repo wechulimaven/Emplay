@@ -267,6 +267,7 @@
   "themeSaved":"Theme saved!",
   "title":"Title",
   "trendingSearch":"Trending Search",
+  "trendingMusic":"Trending Music",
   "ui":"App UI",
   "undo":"Undo",
   "unknown":"Unknown",
@@ -298,5 +299,6 @@
   "yesReplace":"Yes, but Replace Old",
   "youTube":"YouTube",
   "ytLiveAlert":"Video is live. Please wait until the live stream finishes and try again.",
-  "za":"Z-A"
+  "za":"Z-A",
+  "importPlaylist":"Import Playlist"
 }

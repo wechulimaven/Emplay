@@ -14,7 +14,9 @@ import 'package:blackhole/Helpers/audio_query.dart';
 import 'package:blackhole/Helpers/backup_restore.dart';
 import 'package:blackhole/Helpers/supabase.dart';
 import 'package:blackhole/Screens/Home/saavn.dart';
+import 'package:blackhole/Screens/Library/downloads.dart';
 import 'package:blackhole/Screens/Library/library.dart';
+import 'package:blackhole/Screens/Library/liked.dart' as favorite;
 import 'package:blackhole/Screens/LocalMusic/downed_songs.dart';
 import 'package:blackhole/Screens/Search/search.dart';
 import 'package:blackhole/Screens/Settings/setting.dart';
@@ -727,7 +729,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             body: //const YouTube(),
                                 ListView(
-                                  padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.all(4.0),
                               children: <Widget>[
                                 const Padding(
                                   padding: EdgeInsets.only(
@@ -763,10 +765,15 @@ class _HomePageState extends State<HomePage> {
                                           highlightElevation: 0.0,
                                           disabledElevation: 0.0,
                                           onPressed: () {
-                                            // Navigator.of(context).push(
-                                            //      MaterialPageRoute(builder: (context) {
-                                            //   return  ListSongs(widget.db, 1, orientation);
-                                            // }));
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const favorite.LikedSongs(
+                                                        playlistName:
+                                                            'Favorite Songs'),
+                                              ),
+                                            );
                                           },
                                           child: const Icon(
                                             CupertinoIcons.music_albums,
@@ -804,10 +811,11 @@ class _HomePageState extends State<HomePage> {
                                           highlightElevation: 0.0,
                                           disabledElevation: 0.0,
                                           onPressed: () {
-                                            // Navigator.of(context)
-                                            //     .push( MaterialPageRoute(builder: (context) {
-                                            //   return  ListSongs(widget.db, 2, orientation);
-                                            // }));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return const Downloads();
+                                            }));
                                           },
                                           child: const Icon(
                                             Icons.download_sharp,
@@ -844,14 +852,115 @@ class _HomePageState extends State<HomePage> {
                                           elevation: 15.0,
                                           highlightElevation: 0.0,
                                           disabledElevation: 0.0,
-                                          onPressed: () {
-                                            // Navigator.of(context).push(
-                                            //      MaterialPageRoute(builder: (context) {
-                                            //   return  NowPlaying(widget.db, songs,
-                                            //        Random().nextInt(songs.length), 0);
-                                            // },
-                                            // ),);
-                                          },
+                                          onPressed: () => showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  10.0,
+                                                ),
+                                              ),
+                                              title: Text(
+                                                AppLocalizations.of(
+                                                  context,
+                                                )! 
+                                                    .playlists,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                ),
+                                              ),
+                                              content: Container(
+                                                height:MediaQuery.of(context).size.height*0.2,
+                                                child:Row(children: [
+                                                TextButton(
+                                                  style: TextButton.styleFrom(
+                                                    primary: Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary ==
+                                                            Colors.white
+                                                        ? Colors.black
+                                                        : null,
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
+                                                  ),
+                                                  onPressed: () {Navigator.pushNamed(context, '/localplaylists');},
+                                                  child: Text(
+                                                    '${AppLocalizations.of(context)!.playlists} (${AppLocalizations.of(context)!.local})',
+                                                  ),
+                                                ),
+                                               const Spacer(),
+                                                 TextButton(
+                                                  style: TextButton.styleFrom(
+                                                    primary: Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary ==
+                                                            Colors.white
+                                                        ? Colors.black
+                                                        : null,
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
+                                                  ),
+                                                  onPressed: () {Navigator.pushNamed(context, '/localplaylists');},
+                                                  child: Text(
+                                                    '${AppLocalizations.of(context)!.playlists} (${AppLocalizations.of(context)!.local})',
+                                                  ),
+                                                ),
+
+                                              ],)),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed:
+                                                      Navigator.of(context).pop,
+                                                  child: Text(
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!
+                                                        .cancel,
+                                                  ),
+                                                ),
+                                                // TextButton(
+                                                //   style: TextButton.styleFrom(
+                                                //     primary: Theme.of(context)
+                                                //                 .colorScheme
+                                                //                 .secondary ==
+                                                //             Colors.white
+                                                //         ? Colors.black
+                                                //         : null,
+                                                //     backgroundColor:
+                                                //         Theme.of(context)
+                                                //             .colorScheme
+                                                //             .secondary,
+                                                //   ),
+                                                //   onPressed: () {},
+                                                //   child: Text(
+                                                //     AppLocalizations.of(
+                                                //       context,
+                                                //     )!
+                                                //         .delete,
+                                                //   ),
+                                                // ),
+                                                const SizedBox(
+                                                  width: 5.0,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          //{
+                                          // Navigator.of(context).push(
+                                          //      MaterialPageRoute(builder: (context) {
+                                          //   return  NowPlaying(widget.db, songs,
+                                          //        Random().nextInt(songs.length), 0);
+                                          // },
+                                          // ),);
+                                          //   },
                                           child: const Icon(
                                             CupertinoIcons.music_note_list,
                                             size: 50.0,
@@ -1085,7 +1194,7 @@ class _HomePageState extends State<HomePage> {
                                           0,
                                           ':( ',
                                           100,
-                                          'ERROR',
+                                          'UNEXPECTED',
                                           60,
                                           'Service Unavailable',
                                           20,
@@ -1116,11 +1225,10 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.all(2.0),
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 3.0,
-                                      mainAxisSpacing: 2.0,
-                                      mainAxisExtent:105.0
-                                    ),
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 3.0,
+                                            mainAxisSpacing: 2.0,
+                                            mainAxisExtent: 105.0),
                                     itemCount: 20,
                                     itemBuilder: (context, index) {
                                       return ListTile(
