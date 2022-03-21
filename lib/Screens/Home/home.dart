@@ -865,7 +865,7 @@ class _HomePageState extends State<HomePage> {
                                               title: Text(
                                                 AppLocalizations.of(
                                                   context,
-                                                )! 
+                                                )!
                                                     .playlists,
                                                 style: TextStyle(
                                                   color: Theme.of(context)
@@ -874,47 +874,67 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ),
                                               content: Container(
-                                                height:MediaQuery.of(context).size.height*0.2,
-                                                child:Row(children: [
-                                                TextButton(
-                                                  style: TextButton.styleFrom(
-                                                    primary: Theme.of(context)
-                                                                .colorScheme
-                                                                .secondary ==
-                                                            Colors.white
-                                                        ? Colors.black
-                                                        : null,
-                                                    backgroundColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                  ),
-                                                  onPressed: () {Navigator.pushNamed(context, '/localplaylists');},
-                                                  child: Text(
-                                                    '${AppLocalizations.of(context)!.playlists} (${AppLocalizations.of(context)!.local})',
-                                                  ),
-                                                ),
-                                               const Spacer(),
-                                                 TextButton(
-                                                  style: TextButton.styleFrom(
-                                                    primary: Theme.of(context)
-                                                                .colorScheme
-                                                                .secondary ==
-                                                            Colors.white
-                                                        ? Colors.black
-                                                        : null,
-                                                    backgroundColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                  ),
-                                                  onPressed: () {Navigator.pushNamed(context, '/localplaylists');},
-                                                  child: Text(
-                                                    '${AppLocalizations.of(context)!.playlists} (${AppLocalizations.of(context)!.local})',
-                                                  ),
-                                                ),
-
-                                              ],)),
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.05,
+                                                  child: Row(
+                                                    children: [
+                                                      TextButton(
+                                                        style: TextButton
+                                                            .styleFrom(
+                                                          primary: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .secondary ==
+                                                                  Colors.white
+                                                              ? Colors.black
+                                                              : null,
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .secondary,
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              '/localplaylists');
+                                                        },
+                                                        child: Text(
+                                                          '${AppLocalizations.of(context)!.playlists} (${AppLocalizations.of(context)!.local})',
+                                                        ),
+                                                      ),
+                                                      const Spacer(),
+                                                      TextButton(
+                                                        style: TextButton
+                                                            .styleFrom(
+                                                          primary: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .secondary ==
+                                                                  Colors.white
+                                                              ? Colors.black
+                                                              : null,
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .secondary,
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              '/playlists');
+                                                        },
+                                                        child: const Text(
+                                                          //          AppLocalizations.of(
+                                                          //   context,
+                                                          // )!
+                                                          //     .importPlayList,
+                                                          "Import Playlists",
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
