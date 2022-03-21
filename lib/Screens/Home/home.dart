@@ -873,7 +873,7 @@ class _HomePageState extends State<HomePage> {
                                                       .secondary,
                                                 ),
                                               ),
-                                              content: Container(
+                                              content: SizedBox(
                                                   height: MediaQuery.of(context)
                                                           .size
                                                           .height *
@@ -890,10 +890,10 @@ class _HomePageState extends State<HomePage> {
                                                                   Colors.white
                                                               ? Colors.black
                                                               : null,
-                                                          backgroundColor:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .secondary,
+                                                          backgroundColor: Theme
+                                                                  .of(context)
+                                                              .colorScheme
+                                                              .primaryVariant,
                                                         ),
                                                         onPressed: () {
                                                           Navigator.pushNamed(
@@ -915,10 +915,10 @@ class _HomePageState extends State<HomePage> {
                                                                   Colors.white
                                                               ? Colors.black
                                                               : null,
-                                                          backgroundColor:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .secondary,
+                                                          backgroundColor: Theme
+                                                                  .of(context)
+                                                              .colorScheme
+                                                              .primaryVariant,
                                                         ),
                                                         onPressed: () {
                                                           Navigator.pushNamed(
@@ -946,41 +946,14 @@ class _HomePageState extends State<HomePage> {
                                                         .cancel,
                                                   ),
                                                 ),
-                                                // TextButton(
-                                                //   style: TextButton.styleFrom(
-                                                //     primary: Theme.of(context)
-                                                //                 .colorScheme
-                                                //                 .secondary ==
-                                                //             Colors.white
-                                                //         ? Colors.black
-                                                //         : null,
-                                                //     backgroundColor:
-                                                //         Theme.of(context)
-                                                //             .colorScheme
-                                                //             .secondary,
-                                                //   ),
-                                                //   onPressed: () {},
-                                                //   child: Text(
-                                                //     AppLocalizations.of(
-                                                //       context,
-                                                //     )!
-                                                //         .delete,
-                                                //   ),
-                                                // ),
+                                             
                                                 const SizedBox(
                                                   width: 5.0,
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          //{
-                                          // Navigator.of(context).push(
-                                          //      MaterialPageRoute(builder: (context) {
-                                          //   return  NowPlaying(widget.db, songs,
-                                          //        Random().nextInt(songs.length), 0);
-                                          // },
-                                          // ),);
-                                          //   },
+                                      
                                           child: const Icon(
                                             CupertinoIcons.music_note_list,
                                             size: 50.0,
@@ -1010,17 +983,6 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         0.06),
-
-                                // AlbumsTab(
-                                //   albums: _artists,
-                                //   albumsList: _sortedArtistKeysList,
-                                //   tempPath: tempPath!,
-                                // ),
-                                // AlbumsTab(
-                                //   albums: _genres,
-                                //   albumsList: _sortedGenreKeysList,
-                                //   tempPath: tempPath!,
-                                // ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -1036,7 +998,7 @@ class _HomePageState extends State<HomePage> {
                                                 tag: "topArtist[i].artist",
                                                 child: CircleAvatar(
                                                   backgroundImage: AssetImage(
-                                                      "assets/back.jpg"),
+                                                      "assets/music.png"),
                                                   radius: 60.0,
                                                 ),
                                               ),
@@ -1054,7 +1016,6 @@ class _HomePageState extends State<HomePage> {
                                           SizedBox(
                                             width: 150.0,
                                             child: Padding(
-                                              // padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
                                               padding:
                                                   const EdgeInsets.fromLTRB(
                                                       0.0, 15.0, 0.0, 0.0),
@@ -1070,13 +1031,11 @@ class _HomePageState extends State<HomePage> {
                                                           .myMusic,
 
                                                       // "MY MUSIC",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 14.0,
                                                           fontWeight:
                                                               FontWeight.w500,
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.70)),
+                                                          color: Colors.white),
                                                       maxLines: 1,
                                                       overflow:
                                                           TextOverflow.ellipsis,
@@ -1119,7 +1078,7 @@ class _HomePageState extends State<HomePage> {
                                                     child: Hero(
                                                       tag: 'Top Albums',
                                                       child: Image.asset(
-                                                        "assets/back.jpg",
+                                                        "assets/album.jpg",
                                                         height: 120.0,
                                                         width: 180.0,
                                                         fit: BoxFit.cover,
@@ -1144,15 +1103,12 @@ class _HomePageState extends State<HomePage> {
                                                             context,
                                                           )!
                                                               .albums,
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               fontSize: 12.0,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
-                                                              color: Colors
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      0.70)),
+                                                              color: Colors.white),
                                                           maxLines: 1,
                                                         ),
                                                         const SizedBox(
@@ -1168,12 +1124,9 @@ class _HomePageState extends State<HomePage> {
                                                             )!
                                                                 .albumArtist,
                                                             maxLines: 1,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 fontSize: 10.0,
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        0.75)),
+                                                                color: Colors.white),
                                                           ),
                                                         )
                                                       ],
