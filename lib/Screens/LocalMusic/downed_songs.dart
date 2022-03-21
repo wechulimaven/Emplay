@@ -1231,6 +1231,7 @@ class _SongsTabState extends State<SongsTab>
 }
 
 class AlbumsTab extends StatefulWidget {
+  final bool? isFromHome;
   final Map<String, List<SongModel>> albums;
   final List<String> albumsList;
   final String tempPath;
@@ -1239,6 +1240,7 @@ class AlbumsTab extends StatefulWidget {
     required this.albums,
     required this.albumsList,
     required this.tempPath,
+    this.isFromHome,
   }) : super(key: key);
 
   @override
@@ -1253,43 +1255,81 @@ class _AlbumsTabState extends State<AlbumsTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Card(
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.only(top: 20, bottom: 10),
-        shrinkWrap: true,
-        itemExtent: 70.0,
-        itemCount: widget.albumsList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: OfflineAudioQuery.offlineArtworkWidget(
-              id: widget.albums[widget.albumsList[index]]![0].id,
-              type: ArtworkType.AUDIO,
-              tempPath: widget.tempPath,
-              fileName:
-                  widget.albums[widget.albumsList[index]]![0].displayNameWOExt,
-            ),
-            title: Text(
-              widget.albumsList[index],
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: Text(
-              '${widget.albums[widget.albumsList[index]]!.length} Songs',
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DownloadedSongs(
-                    title: widget.albumsList[index],
-                    cachedSongs: widget.albums[widget.albumsList[index]],
-                  ),
+    return widget.isFromHome == null || !widget.isFromHome!
+        ? ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.only(top: 20, bottom: 10),
+            shrinkWrap: true,
+            itemExtent: 70.0,
+            itemCount: widget.albumsList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: OfflineAudioQuery.offlineArtworkWidget(
+                  id: widget.albums[widget.albumsList[index]]![0].id,
+                  type: ArtworkType.AUDIO,
+                  tempPath: widget.tempPath,
+                  fileName: widget
+                      .albums[widget.albumsList[index]]![0].displayNameWOExt,
                 ),
+                title: Text(
+                  widget.albumsList[index],
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  '${widget.albums[widget.albumsList[index]]!.length} Songs',
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DownloadedSongs(
+                        title: widget.albumsList[index],
+                        cachedSongs: widget.albums[widget.albumsList[index]],
+                      ),
+                    ),
+                  );
+                },
               );
             },
+          )
+        : Scaffold(
+          appBar: AppBar(),
+            body: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(top: 20, bottom: 10),
+              shrinkWrap: true,
+              itemExtent: 70.0,
+              itemCount: widget.albumsList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: OfflineAudioQuery.offlineArtworkWidget(
+                    id: widget.albums[widget.albumsList[index]]![0].id,
+                    type: ArtworkType.AUDIO,
+                    tempPath: widget.tempPath,
+                    fileName: widget
+                        .albums[widget.albumsList[index]]![0].displayNameWOExt,
+                  ),
+                  title: Text(
+                    widget.albumsList[index],
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Text(
+                    '${widget.albums[widget.albumsList[index]]!.length} Songs',
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DownloadedSongs(
+                          title: widget.albumsList[index],
+                          cachedSongs: widget.albums[widget.albumsList[index]],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
   }
 }

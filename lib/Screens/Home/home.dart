@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:blackhole/CustomWidgets/custom_physics.dart';
 import 'package:blackhole/CustomWidgets/data_search.dart';
+import 'package:blackhole/CustomWidgets/empty_screen.dart';
 import 'package:blackhole/CustomWidgets/gradient_containers.dart';
 import 'package:blackhole/CustomWidgets/miniplayer.dart';
 import 'package:blackhole/CustomWidgets/snackbar.dart';
@@ -19,8 +20,11 @@ import 'package:blackhole/Screens/Search/search.dart';
 import 'package:blackhole/Screens/Settings/setting.dart';
 import 'package:blackhole/Screens/Top Charts/top.dart';
 import 'package:blackhole/Screens/YouTube/youtube_home.dart';
+import 'package:blackhole/Screens/YouTube/youtube_search.dart';
 import 'package:blackhole/Services/ext_storage_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +37,13 @@ import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+List globalItems = [];
+
+List cachedGlobalItems = [];
+bool fetched = false;
+
+bool emptyGlobal = false;
 
 class HomePage extends StatefulWidget {
   @override
@@ -250,7 +261,29 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getCached();
+    getCachedData();
+    getData();
     super.initState();
+  }
+
+  Future<void> getCachedData() async {
+    cachedGlobalItems =
+        await Hive.box('cache').get("global", defaultValue: []) as List;
+
+    setState(() {});
+  }
+
+  Future<void> getData() async {
+    fetched = true;
+    final List temp = await compute(scrapData, "global");
+    setState(() {
+      globalItems = temp;
+      if (globalItems.isNotEmpty) {
+        cachedGlobalItems = globalItems;
+        Hive.box('cache').put("global", globalItems);
+      }
+      emptyGlobal = globalItems.isEmpty && cachedGlobalItems.isEmpty;
+    });
   }
 
   Future<void> getCached() async {
@@ -311,6 +344,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List showList = cachedGlobalItems;
+    final bool isListEmpty = emptyGlobal;
     return GradientContainer(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -527,7 +562,7 @@ class _HomePageState extends State<HomePage> {
                                   pinned: false,
                                   primary: true,
                                   title: const Text(
-                                    "Grey",
+                                    "Emplay",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20.0,
@@ -656,16 +691,16 @@ class _HomePageState extends State<HomePage> {
                                 //                 ),
                                 //                 const SizedBox(width: 10.0),
                                 //                 Text(
-                                //                   AppLocalizations.of(
-                                //                     context,
-                                //                   )!
-                                //                       .searchText,
-                                //                   style: TextStyle(
-                                //                     fontSize: 16.0,
-                                //                     color: Theme.of(context)
-                                //                         .textTheme
-                                //                         .caption!
-                                //                         .color,
+                                // AppLocalizations.of(
+                                //   context,
+                                // )!
+                                //     .searchText,
+                                // style: TextStyle(
+                                //   fontSize: 16.0,
+                                //   color: Theme.of(context)
+                                //       .textTheme
+                                //       .caption!
+                                //       .color,
                                 //                     fontWeight:
                                 //                         FontWeight.normal,
                                 //                   ),
@@ -692,9 +727,10 @@ class _HomePageState extends State<HomePage> {
                             },
                             body: //const YouTube(),
                                 ListView(
+                                  padding: const EdgeInsets.all(4.0),
                               children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(
+                                const Padding(
+                                  padding: EdgeInsets.only(
                                     left: 15.0,
                                     top: 15.0,
                                     bottom: 10.0,
@@ -705,7 +741,7 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15.0,
                                       letterSpacing: 2.0,
-                                      color: Colors.black.withOpacity(0.75),
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -732,10 +768,10 @@ class _HomePageState extends State<HomePage> {
                                             //   return  ListSongs(widget.db, 1, orientation);
                                             // }));
                                           },
-                                          child: Icon(
-                                            CupertinoIcons.restart,
+                                          child: const Icon(
+                                            CupertinoIcons.music_albums,
                                             size: 50.0,
-                                            color: Colors.blueGrey[400],
+                                            color: Colors.white,
                                           ),
                                         ),
                                         const Padding(
@@ -743,9 +779,13 @@ class _HomePageState extends State<HomePage> {
                                             vertical: 8.0,
                                           ),
                                         ),
-                                        const Text(
-                                          'Favorites',
-                                          style: TextStyle(
+                                        Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!
+                                              .favorites,
+                                          // 'Favorites',
+                                          style: const TextStyle(
                                             fontSize: 12.0,
                                             letterSpacing: 2.0,
                                           ),
@@ -769,10 +809,10 @@ class _HomePageState extends State<HomePage> {
                                             //   return  ListSongs(widget.db, 2, orientation);
                                             // }));
                                           },
-                                          child: Icon(
-                                            Icons.assessment,
+                                          child: const Icon(
+                                            Icons.download_sharp,
                                             size: 50.0,
-                                            color: Colors.blueGrey[400],
+                                            color: Colors.white,
                                           ),
                                         ),
                                         const Padding(
@@ -780,9 +820,13 @@ class _HomePageState extends State<HomePage> {
                                             vertical: 8.0,
                                           ),
                                         ),
-                                        const Text(
-                                          "Downloads",
-                                          style: TextStyle(
+                                        Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!
+                                              .down,
+                                          // "Downloads",
+                                          style: const TextStyle(
                                             fontSize: 12.0,
                                             letterSpacing: 2.0,
                                           ),
@@ -808,10 +852,10 @@ class _HomePageState extends State<HomePage> {
                                             // },
                                             // ),);
                                           },
-                                          child: Icon(
-                                            CupertinoIcons.shuffle_thick,
+                                          child: const Icon(
+                                            CupertinoIcons.music_note_list,
                                             size: 50.0,
-                                            color: Colors.blueGrey[400],
+                                            color: Colors.white,
                                           ),
                                         ),
                                         const Padding(
@@ -819,9 +863,13 @@ class _HomePageState extends State<HomePage> {
                                             vertical: 8.0,
                                           ),
                                         ),
-                                        const Text(
-                                          'Playlist',
-                                          style: TextStyle(
+                                        Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!
+                                              .playlists,
+                                          // 'Playlist',
+                                          style: const TextStyle(
                                             fontSize: 12.0,
                                             letterSpacing: 2.0,
                                           ),
@@ -832,7 +880,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.1),
+                                        0.06),
 
                                 // AlbumsTab(
                                 //   albums: _artists,
@@ -887,7 +935,12 @@ class _HomePageState extends State<HomePage> {
                                                 children: <Widget>[
                                                   Center(
                                                     child: Text(
-                                                      "MY MUSIC",
+                                                      AppLocalizations.of(
+                                                        context,
+                                                      )!
+                                                          .myMusic,
+
+                                                      // "MY MUSIC",
                                                       style: TextStyle(
                                                           fontSize: 14.0,
                                                           fontWeight:
@@ -913,6 +966,7 @@ class _HomePageState extends State<HomePage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => AlbumsTab(
+                                            isFromHome: true,
                                             albums: _albums,
                                             albumsList: _sortedAlbumKeysList,
                                             tempPath: tempPath!,
@@ -934,7 +988,7 @@ class _HomePageState extends State<HomePage> {
                                                 InkResponse(
                                                   child: SizedBox(
                                                     child: Hero(
-                                                      tag: 'topAlbumz',
+                                                      tag: 'Top Albums',
                                                       child: Image.asset(
                                                         "assets/back.jpg",
                                                         height: 120.0,
@@ -957,7 +1011,10 @@ class _HomePageState extends State<HomePage> {
                                                               .start,
                                                       children: <Widget>[
                                                         Text(
-                                                          "Albumsz",
+                                                          AppLocalizations.of(
+                                                            context,
+                                                          )!
+                                                              .albums,
                                                           style: TextStyle(
                                                               fontSize: 12.0,
                                                               fontWeight:
@@ -977,7 +1034,10 @@ class _HomePageState extends State<HomePage> {
                                                                       .only(
                                                                   bottom: 5.0),
                                                           child: Text(
-                                                            "Artist by album",
+                                                            AppLocalizations.of(
+                                                              context,
+                                                            )!
+                                                                .albumArtist,
                                                             maxLines: 1,
                                                             style: TextStyle(
                                                                 fontSize: 10.0,
@@ -1001,145 +1061,134 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.1),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 10.0, right: 0.0),
-                                      child: Column(
-                                        children: <Widget>[
-                                          InkResponse(
-                                            child: const SizedBox(
-                                              child: Hero(
-                                                tag: "topArtist[i].ar",
-                                                child: CircleAvatar(
-                                                  backgroundImage: AssetImage(
-                                                      "assets/back.jpg"),
-                                                  radius: 60.0,
-                                                ),
-                                              ),
-                                            ),
-                                            onTap: () {
-                                              // Navigator.of(context)
-                                              //     .push( MaterialPageRoute(builder: (context) {
-                                              //   return  ArtistCard(widget.db, topArtist[i]);
-                                              // }));
-                                            },
-                                          ),
-                                          SizedBox(
-                                            width: 150.0,
-                                            child: Padding(
-                                              // padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0.0, 15.0, 0.0, 0.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Center(
-                                                    child: Text(
-                                                      "My Music",
-                                                      style: TextStyle(
-                                                          fontSize: 14.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.70)),
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 0.0),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        0.01),
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 15.0,
+                                    top: 15.0,
+                                    bottom: 10.0,
+                                  ),
+                                  child: Text(
+                                    'Trending Songs',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15.0,
+                                      letterSpacing: 2.0,
+                                      color: Colors.white,
                                     ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 35.0),
-                                      child: Card(
-                                        elevation: 12.0,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(6.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              InkResponse(
-                                                child: SizedBox(
-                                                  child: Hero(
-                                                    tag: 'topAlbum[i]bum',
-                                                    child: Image.asset(
-                                                      "assets/back.jpg",
-                                                      height: 120.0,
-                                                      width: 180.0,
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                  ),
+                                ),
+                                if (showList.length <= 50)
+                                  isListEmpty
+                                      ? emptyScreen(
+                                          context,
+                                          0,
+                                          ':( ',
+                                          100,
+                                          'ERROR',
+                                          60,
+                                          'Service Unavailable',
+                                          20,
+                                        )
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              child:
+                                                  const CircularProgressIndicator(),
+                                            ),
+                                          ],
+                                        )
+                                else
+                                  GridView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(2.0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 3.0,
+                                      mainAxisSpacing: 2.0,
+                                      mainAxisExtent:105.0
+                                    ),
+                                    itemCount: 20,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        leading: Card(
+                                          elevation: 5,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(7.0),
+                                          ),
+                                          clipBehavior: Clip.antiAlias,
+                                          child: Stack(
+                                            children: [
+                                              const Image(
+                                                image: AssetImage(
+                                                    'assets/cover.jpg'),
+                                              ),
+                                              if (showList[index]['image'] !=
+                                                  '')
+                                                CachedNetworkImage(
+                                                  fit: BoxFit.cover,
+                                                  imageUrl: showList[index]
+                                                          ['image']
+                                                      .toString(),
+                                                  errorWidget:
+                                                      (context, _, __) =>
+                                                          const Image(
+                                                    fit: BoxFit.cover,
+                                                    image: AssetImage(
+                                                        'assets/cover.jpg'),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      const Image(
+                                                    fit: BoxFit.cover,
+                                                    image: AssetImage(
+                                                        'assets/cover.jpg'),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: 180.0,
-                                                child: Padding(
-                                                  // padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10.0, 8.0, 0.0, 0.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        "Albums",
-                                                        style: TextStyle(
-                                                            fontSize: 12.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    0.70)),
-                                                        maxLines: 1,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 5.0),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsetsDirectional
-                                                                    .only(
-                                                                bottom: 5.0),
-                                                        child: Text(
-                                                          "Artist by album",
-                                                          maxLines: 1,
-                                                          style: TextStyle(
-                                                              fontSize: 10.0,
-                                                              color: Colors
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      0.75)),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
                                             ],
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                        title: Text(
+                                          showList[index]['position'] == null
+                                              ? '${showList[index]["title"]}'
+                                              : '${showList[index]['position']}. ${showList[index]["title"]}',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          '${showList[index]['artist']}',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  YouTubeSearchPage(
+                                                query: showList[index]['title']
+                                                    .toString(),
+                                              ),
+                                              // SearchPage(
+                                              //   query: showList[index]['title'].toString(),
+                                              // ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  )
                               ],
                             ),
                           ),
